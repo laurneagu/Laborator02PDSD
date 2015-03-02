@@ -1,5 +1,6 @@
 package ro.pub.cs.systems.pdsd.lab02.graphicuserinterface;
 
+import android.widget.CheckBox;
 import ro.pub.cs.systems.pdsd.lab02.R;
 import ro.pub.cs.systems.pdsd.lab02.general.Constants;
 import ro.pub.cs.systems.pdsd.lab02.general.Utilities;
@@ -69,13 +70,67 @@ public class LifecycleMonitorActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lifecycle_monitor);
-        
+
         Button okButton = (Button)findViewById(R.id.ok_button);
         okButton.setOnClickListener(buttonClickListener);
         Button cancelButton = (Button)findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(buttonClickListener);
-        Log.d(Constants.TAG, "onCreate() method was invoked");
-    }    
+
+        if(savedInstanceState != null){
+            Log.d(Constants.TAG, "onCreate() method was already invoked before");
+
+            /*
+            if(savedInstanceState.getBoolean("remember") == true){
+                EditText username = (EditText)findViewById(R.id.username_edit_text);
+                EditText pass = (EditText)findViewById(R.id.password_edit_text);
+                CheckBox rememeber = (CheckBox)findViewById(R.id.remember_me_checkbox);
+
+                username.setText(savedInstanceState.getString("username"));
+                pass.setText(savedInstanceState.getString("pass"));
+                rememeber.setChecked(true);
+            }
+            */
+
+        }
+        else
+            Log.d(Constants.TAG, "onCreate() method was invoked");
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        EditText username = (EditText)findViewById(R.id.username_edit_text);
+        EditText pass = (EditText)findViewById(R.id.password_edit_text);
+        CheckBox rememeber = (CheckBox)findViewById(R.id.remember_me_checkbox);
+
+        if(rememeber.isChecked()) {
+            savedInstanceState.putString("username", username.getText().toString());
+            savedInstanceState.putString("pass", pass.getText().toString());
+            savedInstanceState.putBoolean("remember", true);
+        }
+        else{
+            savedInstanceState.putBoolean("remember", false);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        Log.d(Constants.TAG, "onRestoreInstanceState() method was invoked");
+
+        if(savedInstanceState.getBoolean("remember") == true) {
+            EditText username = (EditText) findViewById(R.id.username_edit_text);
+            EditText pass = (EditText) findViewById(R.id.password_edit_text);
+            CheckBox rememeber = (CheckBox) findViewById(R.id.remember_me_checkbox);
+
+            username.setText(savedInstanceState.getString("username"));
+            pass.setText(savedInstanceState.getString("pass"));
+            rememeber.setChecked(true);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,4 +150,42 @@ public class LifecycleMonitorActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.d(Constants.TAG, "method resume called");
+    }
+
+    @Override
+    protected  void onStart(){
+        super.onStart();
+        Log.d(Constants.TAG, "method start called");
+    }
+
+    @Override
+    protected  void onRestart(){
+        super.onRestart();
+        Log.d(Constants.TAG, "method restart called");
+    }
+
+    @Override
+    protected  void onPause(){
+        super.onPause();
+        Log.d(Constants.TAG, "method pause called");
+    }
+
+    @Override
+       protected  void  onStop(){
+        super.onStop();
+        Log.d(Constants.TAG, "method stop called");
+    }
+
+    @Override
+    protected  void  onDestroy(){
+        super.onDestroy();
+        Log.d(Constants.TAG, "method destroy called");
+    }
+
 }
